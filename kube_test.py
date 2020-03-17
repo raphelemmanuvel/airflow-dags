@@ -64,7 +64,8 @@ with models.DAG(
         name='pod-ex-minimum',
         # Entrypoint of the container, if not specified the Docker container's
         # entrypoint is used. The cmds parameter is templated.
-        cmds=['echo'],
+        cmds=["bash", "-cx"],
+        arguments=["echo", "10"],
         # The namespace to run within Kubernetes, default namespace is
         # `default`. There is the potential for the resource starvation of
         # Airflow workers and scheduler within the Cloud Composer environment,
@@ -79,7 +80,9 @@ with models.DAG(
         # uses has permission to access the Google Container Registry
         # (the default service account has permission)
         is_delete_operator_pod=True,
-        image='gcr.io/gcp-runtimes/ubuntu_18_0_4')
+        image_pull_policy="Always",
+        get_logs=True,
+        image='ubuntu:16.04')
     # [END composer_kubernetespodoperator_minconfig]
 
 # [END composer_kubernetespodoperator]
